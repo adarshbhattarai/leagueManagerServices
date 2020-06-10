@@ -22,9 +22,7 @@ HELP.md
 
 
 #EB Extensions
-*.conf
-*.config
-
+/ebextensions/*
 
 
 
