@@ -97,7 +97,7 @@ Answer to that is to add a maven assembly plugin which bundles out application t
  - |-src<br>
      - |-------main
  
- Update your certbot.confif
+ Update your certbot.config
         
         Resources:
           sslSecurityGroupIngress:
@@ -167,7 +167,7 @@ Answer to that is to add a maven assembly plugin which bundles out application t
             return 301 https://$host$request_uri;
           }
  
- 
+Refer : https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/https-singleinstance-java.html
 
 provide app_port (your application port number)
  in certbot.config we first get the certificate and put it in appropriate dir and link it and restart the nginx. Look at    
