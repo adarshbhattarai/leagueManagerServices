@@ -21,8 +21,9 @@ HELP.md
 *application.properties*
 
 
-
-
+#EB Extensions
+*.conf
+*.config
 
 
 

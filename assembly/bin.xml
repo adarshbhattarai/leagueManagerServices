@@ -1,0 +1,33 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>Kit</id>
+    <!--> Elastic beanstalk fuckers don't support tar
+    Error after bundling with tar
+    Failed to execute
+    '/usr/bin/unzip -o -d /var/app/staging /opt/elasticbeanstalk/deploy/appsource/source_bundle'
+    <-->
+    <formats>
+        <format>tar.gz</format>
+        <format>zip</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}/ebextensions/</directory>
+            <outputDirectory>.ebextensions/</outputDirectory>
+            <includes>
+                <include>*</include>
+                <include>nginx/conf.d/https.conf</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    <files>
+        <file>
+            <source>${project.build.directory}/${artifactId}-${project.version}.${packaging}
+            </source>
+            <outputDirectory></outputDirectory>
+            <destName>${artifactId}.${packaging}</destName>
+        </file>
+    </files>
+
+</assembly>
