@@ -161,11 +161,6 @@ Answer to that is to add a maven assembly plugin which bundles out application t
             proxy_set_header        X-Forwarded-Proto https;
         }
     }
-    
-     server {
-            listen 80;
-            return 301 https://$host$request_uri;
-          }
  
 Refer : https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/https-singleinstance-java.html
 
