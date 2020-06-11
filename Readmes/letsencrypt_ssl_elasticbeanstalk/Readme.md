@@ -84,18 +84,17 @@ Answer to that is to add a maven assembly plugin which bundles out application t
  
  Structure is as :<br>
  
-   - |-assembly<br>
-     - |------bin.xml 
-   <br>
-  - |-ebextensions<br>
-    - |------nginx<br>
-       - |------------conf.d<br>
-            - |------------------https.conf <br>
-     - |------certbot.confif<br>
- - |-Readmes<br>
-     - |-----letsencrypt_ssl_elasticbeanstalk<br>
- - |-src<br>
-     - |-------main
+   - assembly<br>
+     - bin.xml <br>
+  - ebextensions<br>
+    - nginx<br>
+       - conf.d<br>
+            - https.conf <br>
+     - certbot.confif<br>
+ - Readmes<br>
+     - letsencrypt_ssl_elasticbeanstalk<br>
+ - src<br>
+     - main
  
  Update your certbot.config
         
