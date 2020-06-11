@@ -124,9 +124,9 @@ Answer to that is to add a maven assembly plugin which bundles out application t
           30_link:
             command: "sudo ln -sf /etc/letsencrypt/live/${yourbeanstalk.com} /etc/letsencrypt/live/ebcert"
           40_restart_nginx:
-            command: "service nginx restart"
+            command: "sudo service nginx restart"
           50_cronjobsetrenewal:
-            command: '(crontab -l ; echo ''0 6 * * * root /opt/certbot/certbot-auto renew --standalone --pre-hook "service nginx stop" --post-hook "service nginx start" --force-renew'') | crontab -'
+            command: '(crontab -l ; echo ''0 6 * * * root /opt/certbot/certbot-auto renew --standalone --pre-hook "service nginx stop" --post-hook "sudo service nginx start" --force-renew'') | crontab -'
  
  
  
