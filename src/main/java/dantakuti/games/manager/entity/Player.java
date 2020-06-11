@@ -198,4 +198,43 @@ public class Player {
     public void setRoles(Collection<Roles> roles) {
         this.roles = roles;
     }
+
+    public void addWin() {
+        if(this.getPlayerStat() == null){
+            this.setPlayerStat(new PlayerStat());
+        }
+        this.getPlayerStat().setGamesWon(this.getPlayerStat().getGamesWon()+1);
+        this.getPlayerStat().setGamesPlayed(this.getPlayerStat().getGamesPlayed()+1);
+    }
+
+    public void addLoss() {
+        if(this.getPlayerStat() == null){
+            this.setPlayerStat(new PlayerStat());
+        }
+        this.getPlayerStat().setGamesLost(this.getPlayerStat().getGamesLost()+1);
+        this.getPlayerStat().setGamesPlayed(this.getPlayerStat().getGamesPlayed()+1);
+    }
+
+    public void addDraw() {
+        if(this.getPlayerStat() == null){
+            this.setPlayerStat(new PlayerStat());
+        }
+        this.getPlayerStat().setGamesDrawn(this.getPlayerStat().getGamesDrawn()+1);
+        this.getPlayerStat().setGamesPlayed(this.getPlayerStat().getGamesPlayed()+1);
+    }
+
+    public void removeDraw() {
+        this.getPlayerStat().setGamesDrawn(this.getPlayerStat().getGamesDrawn()-1);
+        this.getPlayerStat().setGamesPlayed(this.getPlayerStat().getGamesPlayed()-1);
+    }
+
+    public void removeWin() {
+        this.getPlayerStat().setGamesWon(this.getPlayerStat().getGamesWon()-1);
+        this.getPlayerStat().setGamesPlayed(this.getPlayerStat().getGamesPlayed()-1);
+    }
+
+    public void removeLoss() {
+        this.getPlayerStat().setGamesLost(this.getPlayerStat().getGamesLost()-1);
+        this.getPlayerStat().setGamesPlayed(this.getPlayerStat().getGamesPlayed()-1);
+    }
 }

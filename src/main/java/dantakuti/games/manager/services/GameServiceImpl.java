@@ -82,11 +82,21 @@ public class GameServiceImpl implements GameService {
         long groupId = data.getGroupId();
         String filename = UUID.randomUUID().toString();
         Game game = gameRepository.findById(gameId);
-        GameResult gameResult = new GameResult(data.getHomePlayerScore(),data.getAwayPlayerScore());
-        GameStat stat = game.getGameStat();
-        game.setGameResult(gameResult);
-        game.setGameStat(GameStat.PLAYED);
-        if(game.getPlayedOn() == null )game.setPlayedOn(new Timestamp(System.currentTimeMillis()));
+        GameResult gameResult;
+        GameStat currentStat = game.getGameStat();
+        GameResult previousResult=null;
+        if(currentStat == GameStat.NOT_PLAYED){
+            gameResult = new GameResult(data.getHomePlayerScore(),data.getAwayPlayerScore());
+            game.setGameStat(GameStat.PLAYED);
+            game.setPlayedOn(new Timestamp(System.currentTimeMillis()));
+            game.setGameResult(gameResult);
+        }else{
+            gameResult = game.getGameResult();
+            previousResult = new GameResult(gameResult.getHomeScore(),gameResult.getAwayScore());
+            gameResult.setAwayScore(data.getAwayPlayerScore());
+            gameResult.setHomeScore(data.getHomePlayerScore());
+        }
+
         List<String> links = game.getLinks()==null?new ArrayList<>() : game.getLinks();
         for(String videos : data.getVideoLinks())
             links.add(videos);
@@ -103,13 +113,17 @@ public class GameServiceImpl implements GameService {
         }
         game.setImages(images);
         gameRepository.update(game);
-
-
-        playerService.updatePlayerStat(game,groupId,stat);
-
-
-
+        if(currentStat==GameStat.PLAYED || currentStat==GameStat.LIVE) {
+            playerService.updatePlayerStat(game, groupId, previousResult);
+        }else {
+            playerService.addNewGameStat(game, groupId);
+        }
         return true;
+    }
+
+    @Override
+    public int getHighestScore(Player player, Long groupId) {
+        return gameRepository.findHighestScoreInLeague(player,groupId);
     }
 
     private Game createGame(Player homePlayer, Player awayPlayer, LeagueGroups group) {

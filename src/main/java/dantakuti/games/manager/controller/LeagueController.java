@@ -1,17 +1,13 @@
 package dantakuti.games.manager.controller;
 
-import dantakuti.games.manager.entity.Game;
 import dantakuti.games.manager.entity.League;
 import dantakuti.games.manager.entity.Statistics;
 import dantakuti.games.manager.model.LeagueModel;
-import dantakuti.games.manager.payload.response.JwtResponse;
 import dantakuti.games.manager.payload.response.MessageResponse;
 import dantakuti.games.manager.services.LeagueService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,6 +30,14 @@ public class LeagueController {
     public ResponseEntity<?>  createNewLeague(@Valid @RequestBody LeagueModel model, Principal principal){
         League leagueCreated = leagueService.createLeague(model,principal);
         return ResponseEntity.ok(new MessageResponse(leagueCreated.getToken().toString()));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value="create",method= RequestMethod.POST)
+    public ResponseEntity<?>  deleteLeague(String leagueId){
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("NOT ENABLED YET"));
     }
 
     @RequestMapping(value="/{token}",method= RequestMethod.GET)

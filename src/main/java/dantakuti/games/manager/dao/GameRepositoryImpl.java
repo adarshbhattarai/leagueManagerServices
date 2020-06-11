@@ -2,6 +2,7 @@ package dantakuti.games.manager.dao;
 
 import dantakuti.games.manager.entity.Game;
 import dantakuti.games.manager.entity.GameStat;
+import dantakuti.games.manager.entity.Player;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,11 @@ public class GameRepositoryImpl implements GameRepository {
 
         entityManager.merge(game);
         return game;
+    }
+
+    @Override
+    public int findHighestScoreInLeague(Player player, Long groupId) {
+        return 0;
     }
 
 

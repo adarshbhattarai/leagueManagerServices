@@ -143,18 +143,37 @@ public class Statistics {
         this.highestScore = highestScore;
     }
 
-    public void updateStat(int myscore, int opponentScore) {
-        this.gamesPlayed=this.gamesPlayed+1;
-        this.goalsFor = this.goalsFor+myscore;
-        this.goalAgainst = this.goalAgainst+opponentScore;
-        this.highestScore = Math.max(highestScore,myscore);
-        if(myscore==opponentScore){
-            this.gamesDrawn=this.gamesDrawn+1;
-        }
-        else if(myscore>opponentScore){
-            this.gamesWon =  gamesWon+1;
+
+    public void removePreviousStat(GameResult previousResult, boolean isPlayingHome) {
+        int myScore = isPlayingHome ? previousResult.getHomeScore() : previousResult.getAwayScore();
+        int opponentScore = isPlayingHome ? previousResult.getAwayScore() : previousResult.getHomeScore();
+
+        this.gamesPlayed-=1;
+        this.goalsFor-=myScore;
+        this.goalAgainst-=opponentScore;
+        if(myScore<opponentScore){
+            this.gamesLost-=1;
+        }else if(myScore  > opponentScore){
+            this.gamesWon-=1;
         }else{
-        this.gamesLost = this.gamesLost+1;
+            this.gamesDrawn-=1;
         }
+
+    }
+
+    public void addNewStat(GameResult gameResult, boolean isPlayingHome) {
+        int myScore = isPlayingHome ? gameResult.getHomeScore() : gameResult.getAwayScore();
+        int opponentScore = isPlayingHome ? gameResult.getAwayScore() : gameResult.getHomeScore();
+        this.gamesPlayed+=1;
+        this.goalsFor+=myScore;
+        this.goalAgainst+=opponentScore;
+        if(myScore<opponentScore){
+            this.gamesLost+=1;
+        }else if(myScore  > opponentScore){
+            this.gamesWon+=1;
+        }else{
+            this.gamesDrawn+=1;
+        }
+
     }
 }

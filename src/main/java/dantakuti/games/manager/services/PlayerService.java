@@ -1,7 +1,7 @@
 package dantakuti.games.manager.services;
 
 import dantakuti.games.manager.entity.Game;
-import dantakuti.games.manager.entity.GameStat;
+import dantakuti.games.manager.entity.GameResult;
 import dantakuti.games.manager.entity.Player;
 import dantakuti.games.manager.model.PlayerModel;
 
@@ -17,5 +17,7 @@ public interface PlayerService {
 
     Set<Player> getPlayers(PlayerModel[] players);
 
-    void updatePlayerStat(Game game, Long groupId, GameStat stat);
+    void updatePlayerStat(Game game, Long groupId, GameResult previousResult);
+
+    void addNewGameStat(Game game, long groupId);
 }

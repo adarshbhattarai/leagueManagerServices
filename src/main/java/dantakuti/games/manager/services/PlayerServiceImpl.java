@@ -43,45 +43,55 @@ public class PlayerServiceImpl implements PlayerService{
         return setOfPlayers;
     }
     @Override
-    public void updatePlayerStat(Game game, Long groupId, GameStat stat) {
+    public void updatePlayerStat(Game game, Long groupId, GameResult previousResult) {
 
+        updateStat(game,groupId,previousResult);
+    }
+
+    @Override
+    public void addNewGameStat(Game game, long groupId) {
+
+        updateStat(game,groupId,null);
+    }
+
+    public void updateStat(Game game, Long groupId, GameResult previousResult){
         Player homePlayer = game.getHomePlayerId();
         Player awayPlayer = game.getAwayPlayerId();
         GameResult result = game.getGameResult();
+        if(previousResult!=null) removePlayerStat(game,previousResult);
+        addPlayerStat(game,result);
+        playerDao.update(homePlayer);
+        playerDao.update(awayPlayer);
+        groupServices.updateStat(groupId,game,previousResult);
+    }
 
-        if(game.getGameStat().equals(GameStat.PLAYED)) {
-            if (result.getHomeScore() < result.getAwayScore()) {
-                    updateStat(awayPlayer,homePlayer,false,stat);
-            } else if (result.getHomeScore() > result.getAwayScore()) {
-                updateStat(awayPlayer,homePlayer,false,stat);
-            } else {
-                updateStat(awayPlayer,homePlayer,true,stat);
-            }
-
-            playerDao.update(homePlayer);
-            playerDao.update(awayPlayer);
-            groupServices.updateStat(groupId,homePlayer,awayPlayer,result.getHomeScore(),result.getAwayScore());
+    private void addPlayerStat(Game game, GameResult currentResult) {
+        Player homePlayer = game.getHomePlayerId();
+        Player awayPlayer = game.getAwayPlayerId();
+        if(currentResult.getHomeScore() > currentResult.getAwayScore()){
+            homePlayer.addWin();
+            awayPlayer.addLoss();
+        }else if(currentResult.getHomeScore()<currentResult.getAwayScore()){
+            homePlayer.addLoss();
+            awayPlayer.addWin();
+        }else{
+            homePlayer.addDraw();
+            awayPlayer.addDraw();
         }
     }
 
-    private void updateStat(Player winner, Player loser, boolean isDraw, GameStat stat) {
-
-        if(winner.getPlayerStat()==null){
-            winner.setPlayerStat(new PlayerStat());
-        }
-        if(loser.getPlayerStat()==null){
-            loser.setPlayerStat(new PlayerStat());
-        }
-
-        winner.getPlayerStat().setGamesPlayed( winner.getPlayerStat().getGamesPlayed()+(stat.equals(GameStat.PLAYED)? 0:1));
-        loser.getPlayerStat().setGamesPlayed(loser.getPlayerStat().getGamesPlayed()+(stat.equals(GameStat.PLAYED)? 0:1));
-
-        if(isDraw){
-            winner.getPlayerStat().setGamesDrawn(winner.getPlayerStat().getGamesDrawn()+1);
-            loser.getPlayerStat().setGamesDrawn(loser.getPlayerStat().getGamesDrawn()+1);
+    private void removePlayerStat(Game game, GameResult previousResult) {
+        Player homePlayer = game.getHomePlayerId();
+        Player awayPlayer = game.getAwayPlayerId();
+        if(previousResult.getHomeScore()<previousResult.getAwayScore()){
+            homePlayer.removeLoss();
+            awayPlayer.removeWin();
+        }else if(previousResult.getHomeScore()>previousResult.getAwayScore()){
+            homePlayer.removeWin();
+            awayPlayer.removeLoss();
         }else{
-            winner.getPlayerStat().setGamesWon(winner.getPlayerStat().getGamesWon()+1);
-            loser.getPlayerStat().setGamesLost(winner.getPlayerStat().getGamesLost()+1);
+            homePlayer.removeDraw();
+            awayPlayer.removeDraw();
         }
 
     }

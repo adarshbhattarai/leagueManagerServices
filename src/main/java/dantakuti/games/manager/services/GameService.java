@@ -24,4 +24,6 @@ public interface GameService {
     List<Game> fetchGamesByGroupId(Long groupId,int limit, int offset) ;
 
     boolean updateGameDetail(GameUpload data);
+
+    int getHighestScore(Player home, Long groupId);
 }

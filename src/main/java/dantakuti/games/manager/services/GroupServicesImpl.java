@@ -144,15 +144,33 @@ public class GroupServicesImpl implements GroupServices {
     }
 
     @Override
-    public void updateStat(Long groupId, Player me, Player opponent, int myScore, int opponentScore) {
+    public void updateStat(Long groupId, Game game, GameResult previousResult) {
+
         Optional<LeagueGroups> leagueGroups = groupRepository.findById(groupId);
         if(leagueGroups.isPresent()){
             LeagueGroups groups = leagueGroups.get();
-            Statistics myStat = statisticsRepository.findByGroup_idAndPlayer(groups,me);
-            Statistics opponentStat = statisticsRepository.findByGroup_idAndPlayer(groups,opponent);
-            myStat.updateStat(myScore,opponentScore);
-            opponentStat.updateStat(opponentScore,myScore);
-            groupRepository.save(groups);
+            Player home =  game.getHomePlayerId();
+            Player away = game.getAwayPlayerId();
+            Statistics homePlayerStat = statisticsRepository.findByGroup_idAndPlayer(groups,home);
+            Statistics awayPlayerStat = statisticsRepository.findByGroup_idAndPlayer(groups,away);
+            if(previousResult!=null){
+                    homePlayerStat.removePreviousStat(previousResult,true);
+                    awayPlayerStat.removePreviousStat(previousResult,false);
+
+            }
+            homePlayerStat.addNewStat(game.getGameResult(),true);
+            awayPlayerStat.addNewStat(game.getGameResult(),false);
+
+            int homePlayerHighestScore = gameService.getHighestScore(
+                    home,groupId);
+            int awayPlayerHighestScore = gameService.getHighestScore(
+                    away,groupId);
+
+            homePlayerStat.setHighestScore(Math.max(homePlayerHighestScore,game.getGameResult().getHomeScore()));
+            awayPlayerStat.setHighestScore(Math.max(awayPlayerHighestScore, game.getGameResult().getAwayScore()));
+
+            statisticsRepository.save(homePlayerStat);
+            statisticsRepository.save(awayPlayerStat);
         }
     }
 }

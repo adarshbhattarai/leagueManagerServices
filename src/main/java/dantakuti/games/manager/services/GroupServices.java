@@ -1,8 +1,6 @@
 package dantakuti.games.manager.services;
 
-import dantakuti.games.manager.entity.League;
-import dantakuti.games.manager.entity.LeagueGroups;
-import dantakuti.games.manager.entity.Player;
+import dantakuti.games.manager.entity.*;
 import dantakuti.games.manager.model.GameModel;
 import dantakuti.games.manager.model.GroupModel;
 import dantakuti.games.manager.model.GroupTableModel;
@@ -21,5 +19,5 @@ public interface GroupServices {
 
     List<GameModel> getGames(UUID id, Long groupId);
 
-    void updateStat(Long groupId, Player awayPlayer, Player homePlayer, int awayScore, int homeScore);
+    void updateStat(Long groupId, Game game, GameResult previousResult);
 }

@@ -2,6 +2,7 @@ package dantakuti.games.manager.dao;
 
 import dantakuti.games.manager.entity.Game;
 import dantakuti.games.manager.entity.GameStat;
+import dantakuti.games.manager.entity.Player;
 
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface GameRepository {
 
     Game update(Game gameId);
 
+    int findHighestScoreInLeague(Player player, Long groupId);
 }
