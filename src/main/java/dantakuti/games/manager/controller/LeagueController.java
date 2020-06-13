@@ -33,7 +33,7 @@ public class LeagueController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value="create",method= RequestMethod.POST)
+    @RequestMapping(value="delete",method= RequestMethod.POST)
     public ResponseEntity<?>  deleteLeague(String leagueId){
             return ResponseEntity
                     .badRequest()

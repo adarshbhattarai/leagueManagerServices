@@ -123,7 +123,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public int getHighestScore(Player player, Long groupId) {
-        return gameRepository.findHighestScoreInLeague(player,groupId);
+        return gameRepository.findPlayerHighestScore(player,groupId);
     }
 
     private Game createGame(Player homePlayer, Player awayPlayer, LeagueGroups group) {

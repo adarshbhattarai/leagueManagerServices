@@ -20,5 +20,5 @@ public interface GameRepository {
 
     Game update(Game gameId);
 
-    int findHighestScoreInLeague(Player player, Long groupId);
+    int findPlayerHighestScore(Player player, Long groupId);
 }

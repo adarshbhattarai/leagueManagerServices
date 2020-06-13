@@ -108,7 +108,7 @@ public class UserController {
         }
 
         user.setRoles(roles);
-   //     userDetailService.save(user);
+        userDetailService.save(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 
 

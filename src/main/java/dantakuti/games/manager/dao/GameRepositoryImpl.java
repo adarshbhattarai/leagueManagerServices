@@ -67,9 +67,34 @@ public class GameRepositoryImpl implements GameRepository {
     }
 
     @Override
-    public int findHighestScoreInLeague(Player player, Long groupId) {
-        return 0;
+    public int findPlayerHighestScore(Player player, Long groupId) {
+
+        int highestHomeScore = findHighestHomeScore(player,groupId);
+        int highestAwayScore = findHighestAwayScore(player, groupId);
+        return Math.max(highestAwayScore,highestHomeScore);
     }
 
+    private int findHighestAwayScore(Player player, Long groupId) {
+        Object result = entityManager.createQuery(
+                "select max(gr.awayScore ) from Game g " +
+                        "inner join g.gameResult gr " +
+                        "where g.group_id.group_id =:groupId and g.awayPlayerId.playerID=:playerId")
+                .setParameter("groupId",groupId)
+                .setParameter("playerId",player.getPlayerID())
+                .getSingleResult();
 
+        return result==null?0:(int)result;
+    }
+
+    private int findHighestHomeScore(Player player, Long groupId) {
+        Object result = entityManager.createQuery(
+                "select max(gr.homeScore ) from Game g " +
+                        "inner join g.gameResult gr " +
+                        "where g.group_id.group_id =:groupId and g.homePlayerId.playerID=:playerId")
+                .setParameter("groupId",groupId)
+                .setParameter("playerId",player.getPlayerID())
+                .getSingleResult();
+
+        return result==null?0:(int)result;
+    }
 }
